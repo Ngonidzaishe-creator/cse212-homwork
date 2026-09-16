@@ -1,29 +1,32 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-// TODO Problem 2 - Write and run test cases and fix the code to match requirements.
-
-[TestClass]
-public class PriorityQueueTests
+public class PriorityQueue
 {
-    [TestMethod]
-    // Scenario: 
-    // Expected Result: 
-    // Defect(s) Found: 
-    public void TestPriorityQueue_1()
+    private readonly List<(object Value, int Priority)> _queue = new();
+
+    public void Enqueue(object value, int priority)
     {
-        var priorityQueue = new PriorityQueue();
-        Assert.Fail("Implement the test case and then remove this.");
+        _queue.Add((value, priority));
     }
 
-    [TestMethod]
-    // Scenario: 
-    // Expected Result: 
-    // Defect(s) Found: 
-    public void TestPriorityQueue_2()
+    public object Dequeue()
     {
-        var priorityQueue = new PriorityQueue();
-        Assert.Fail("Implement the test case and then remove this.");
+        if (_queue.Count == 0)
+        {
+            throw new InvalidOperationException("The queue is empty.");
+        }
+
+        var highestPriorityIndex = 0;
+        for (int i = 1; i < _queue.Count; i++)
+        {
+            if (_queue[i].Priority > _queue[highestPriorityIndex].Priority)
+            {
+                highestPriorityIndex = i;
+            }
+        }
+
+        var value = _queue[highestPriorityIndex].Value;
+        _queue.RemoveAt(highestPriorityIndex);
+        return value;
     }
 
-    // Add more test cases as needed below.
+    public bool IsEmpty() => _queue.Count == 0;
 }

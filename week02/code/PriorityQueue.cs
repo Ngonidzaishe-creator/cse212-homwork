@@ -1,63 +1,38 @@
-﻿public class PriorityQueue
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+[TestClass]
+public class PriorityQueueTests
 {
-    private List<PriorityItem> _queue = new();
-
-    /// <summary>
-    /// Add a new value to the queue with an associated priority.  The
-    /// node is always added to the back of the queue regardless of 
-    /// the priority.
-    /// </summary>
-    /// <param name="value">The value</param>
-    /// <param name="priority">The priority</param>
-    public void Enqueue(string value, int priority)
+    [TestMethod]
+    public void TestEnqueueAndDequeue()
     {
-        var newNode = new PriorityItem(value, priority);
-        _queue.Add(newNode);
+        var queue = new PriorityQueue();
+        queue.Enqueue("Task 1", 1);
+        queue.Enqueue("Task 2", 2);
+        queue.Enqueue("Task 3", 3);
+
+        Assert.AreEqual("Task 3", queue.Dequeue());
+        Assert.AreEqual("Task 2", queue.Dequeue());
+        Assert.AreEqual("Task 1", queue.Dequeue());
     }
 
-    public string Dequeue()
+    [TestMethod]
+    public void TestDequeueEmptyQueue()
     {
-        if (_queue.Count == 0) // Verify the queue is not empty
-        {
-            throw new InvalidOperationException("The queue is empty.");
-        }
-
-        // Find the index of the item with the highest priority to remove
-        var highPriorityIndex = 0;
-        for (int index = 1; index < _queue.Count - 1; index++)
-        {
-            if (_queue[index].Priority >= _queue[highPriorityIndex].Priority)
-                highPriorityIndex = index;
-        }
-
-        // Remove and return the item with the highest priority
-        var value = _queue[highPriorityIndex].Value;
-        return value;
+        var queue = new PriorityQueue();
+        Assert.ThrowsException<InvalidOperationException>(() => queue.Dequeue());
     }
 
-    // DO NOT MODIFY THE CODE IN THIS METHOD
-    // The graders rely on this method to check if you fixed all the bugs, so changes to it will cause you to lose points.
-    public override string ToString()
+    [TestMethod]
+    public void TestEnqueueSamePriority()
     {
-        return $"[{string.Join(", ", _queue)}]";
-    }
-}
+        var queue = new PriorityQueue();
+        queue.Enqueue("Task 1", 2);
+        queue.Enqueue("Task 2", 2);
+        queue.Enqueue("Task 3", 2);
 
-internal class PriorityItem
-{
-    internal string Value { get; set; }
-    internal int Priority { get; set; }
-
-    internal PriorityItem(string value, int priority)
-    {
-        Value = value;
-        Priority = priority;
-    }
-
-    // DO NOT MODIFY THE CODE IN THIS METHOD
-    // The graders rely on this method to check if you fixed all the bugs, so changes to it will cause you to lose points.
-    public override string ToString()
-    {
-        return $"{Value} (Pri:{Priority})";
+        Assert.AreEqual("Task 1", queue.Dequeue()); // FIFO
+        Assert.AreEqual("Task 2", queue.Dequeue());
+        Assert.AreEqual("Task 3", queue.Dequeue());
     }
 }

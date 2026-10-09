@@ -6,7 +6,7 @@ public class PersonQueue
 
     public void Enqueue(Person person)
     {
-        _queue.Insert(0, person);
+        _queue.Add(person);
     }
 
     public Person Dequeue()
